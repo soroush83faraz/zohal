@@ -27,7 +27,6 @@ class _AddControllerState extends State<AddController> {
       _ageController.text = widget.child!.age.toString();
       _timeController.text = widget.child!.totalReserved.toString();
       _timePassedController.text = widget.child!.timePassed.toString();
-      _picture = widget.child!.picture;
     } else {
       _picture = "assets/default.png";
     }
@@ -50,7 +49,6 @@ class _AddControllerState extends State<AddController> {
       final child = Child(
         name: _nameController.text,
         age: int.parse(_ageController.text),
-        picture: _picture,
         timeLeft: int.parse(_timeController.text),
         totalReserved: int.parse(_timeController.text),
         timePassed: int.parse(_timePassedController.text),

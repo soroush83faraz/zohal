@@ -6,8 +6,6 @@ import 'package:zohal/controllers/edit_controller.dart';
 import 'package:zohal/controllers/add_controller.dart';
 import 'dart:async'; 
 
-
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -19,8 +17,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ChildController _controller = ChildController();
   Color _titleColor =  Colors.white;
-
-
 
   @override
   void initState() {
@@ -67,20 +63,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(
-          'Kids Time Manager',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: _titleColor,
-            shadows: const [
-              Shadow(
-                offset: Offset(2, 2),
-                blurRadius: 5,
-                color: Colors.black54,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'سیستم مدیریت خانه بازی',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: _titleColor,
+                shadows: const [
+                  Shadow(
+                    offset: Offset(2, 2),
+                    blurRadius: 5,
+                    color: Colors.black54,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -92,7 +93,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
         child: _controller.children.isEmpty
             ? const Center(
                 child: Text(
-                  "No children added yet. Click the button below to add a child.",
+                  "!هیچ کودکی در حال حاضر در حال بازی نیست",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -114,30 +114,80 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   final child = _controller.children[index];
                   return ListTile(
-                    leading: CircleAvatar(backgroundImage: AssetImage(child.picture)),
-                    title: Text(
-                      child.name,
-                      style:const TextStyle(fontSize: 20, color: Colors.white),
+                    leading: SizedBox(
+                      width: 80, // Constrain the width of the leading widget
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.white),
+                            onPressed: () => _editChild(index),
+                          ),
+                          IconButton(
+  icon: const Icon(Icons.delete, color: Colors.white),
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('حذف کودک'),
+          content: const Text('آیا مطمئن هستید؟'),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('خیر'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller.deleteChild(index);
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('بله'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  },
+),
+                        ],
+                      ),
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          child.name,
+                          style: const TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ],
                     ),
                     subtitle: Row(
-                          children: [
-                            Expanded(
-                              child: LinearProgressIndicator(
-                                value: child.timeLeft / child.totalReserved,
-                                backgroundColor: Colors.grey[300],
-                                color: child.timeLeft > 5 ? Colors.green : Colors.red,
-                              ),
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                            child: LinearProgressIndicator(
+                              value: ((child.timePassed - child.totalReserved) / child.totalReserved).abs(),
+                              backgroundColor: Colors.grey[300],
+                              color: child.timeLeft > 5 ? Colors.green : Colors.red,
                             ),
-                            const SizedBox(width: 10),
-                            Text(
-                              "${child.timePassed}/${child.totalReserved} min",
-                              style: const TextStyle(color: Colors.white70),
-                            ),
-                          ],
+                          ),
                         ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.white),
-                      onPressed: () => _editChild(index),
+                        Text(
+                          "دقیقه ${(child.timePassed - child.totalReserved).abs()}",
+                          style: const TextStyle(color: Colors.white70),
+                        ),
+                      ],
                     ),
                     onTap: () {
                       Navigator.push(

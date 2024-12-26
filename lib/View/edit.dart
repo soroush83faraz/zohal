@@ -6,8 +6,6 @@ class EditChildPage extends StatelessWidget {
   final TextEditingController ageController;
   final TextEditingController timeController;
   final TextEditingController timePassedController;
-  final String picture;
-  final VoidCallback onPickImage;
   final VoidCallback onSaveChild;
 
   const EditChildPage({
@@ -16,8 +14,6 @@ class EditChildPage extends StatelessWidget {
     required this.ageController,
     required this.timeController,
     required this.timePassedController,
-    required this.picture,
-    required this.onPickImage,
     required this.onSaveChild,
   });
 
@@ -25,7 +21,12 @@ class EditChildPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Child"), // Title passed dynamically.
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("ویرایش اطلاعات کودک"),
+          ],
+        ), // Title passed dynamically.
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -41,66 +42,75 @@ class EditChildPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Edit Child Details',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'ویرایش اطلاعات ',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: onPickImage, // Opens the image picker.
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage(picture), // Display picture.
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'نام',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: ageController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Age',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: TextField(
+                  controller: ageController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'سن',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: timeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Time (minutes)',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: TextField(
+                  controller: timeController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'زمان باقی مانده (برحسب دقیقه)',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: timePassedController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Time Passed',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: TextField(
+                  controller: timePassedController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'زمان گذشته (برحسب دقیقه)',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
               ),
@@ -115,7 +125,7 @@ class EditChildPage extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    'Save Changes', // Static button text.
+                    'ذخیره', // Static button text.
                     style: TextStyle(fontSize: 20),
                   ),
                 ),

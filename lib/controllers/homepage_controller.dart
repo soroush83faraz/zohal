@@ -17,5 +17,7 @@ class ChildController {
     }
     children.sort((a, b) => a.timeLeft.compareTo(b.timeLeft));
   }
-
+  void deleteChild(int index) {
+    children.removeAt(index);
+  }
 }

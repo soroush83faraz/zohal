@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:zohal/view/add.dart';
 import 'package:zohal/models/child.dart';
 
 class AddController extends StatefulWidget {
-
   final Child? child;
 
   const AddController({super.key, this.child});
+  
   @override
   _AddControllerState createState() => _AddControllerState();
 }
@@ -17,8 +16,7 @@ class _AddControllerState extends State<AddController> {
   final _ageController = TextEditingController();
   final _timeController = TextEditingController();
   final _timePassedController = TextEditingController();
-  late String _picture;
-  
+
   @override
   void initState() {
     super.initState();
@@ -26,34 +24,43 @@ class _AddControllerState extends State<AddController> {
       _nameController.text = widget.child!.name;
       _ageController.text = widget.child!.age.toString();
       _timeController.text = widget.child!.totalReserved.toString();
-      _timePassedController.text = widget.child!.timePassed.toString();
-    } else {
-      _picture = "assets/default.png";
-    }
-  }
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _picture = image.path;
-      });
+      _timePassedController.text = (widget.child!.totalReserved - widget.child!.timeLeft).toString();
     }
   }
 
   void _saveChild() {
     if (_nameController.text.isNotEmpty &&
         _ageController.text.isNotEmpty &&
-        _timeController.text.isNotEmpty) {
-      final child = Child(
-        name: _nameController.text,
-        age: int.parse(_ageController.text),
-        timeLeft: int.parse(_timeController.text),
-        totalReserved: int.parse(_timeController.text),
-        timePassed: int.parse(_timePassedController.text),
-      );
-      Navigator.pop(context, child); // Return the child object.
+        _timeController.text.isNotEmpty &&
+        _timePassedController.text.isNotEmpty) {
+      int totalReserved = int.parse(_timeController.text);
+      int timePassed = int.parse(_timePassedController.text);
+
+      if (totalReserved - timePassed <= 0) {
+        const snackBar = SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "زمان سپری شده نمی تواند بیشتر از زمان رزرو شده باشد",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 5),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        final child = Child(
+          name: _nameController.text,
+          age: int.parse(_ageController.text),
+          totalReserved: totalReserved,
+          timeLeft: totalReserved - timePassed,
+          dateTimeReserved: DateTime.now().subtract(Duration(minutes: timePassed)), // Correctly set dateTimeReserved
+        );
+        Navigator.pop(context, child);
+      }
     }
   }
 
@@ -64,8 +71,6 @@ class _AddControllerState extends State<AddController> {
       ageController: _ageController,
       timeController: _timeController,
       timePassedController: _timePassedController,
-      picture: _picture,
-      onPickImage: _pickImage,
       onSaveChild: _saveChild,
     );
   }

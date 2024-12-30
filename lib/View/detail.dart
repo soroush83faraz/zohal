@@ -54,7 +54,7 @@ class ChildDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "زمان صرف شده: ${child.timePassed} دقیقه", // Time passed.
+                    "زمان صرف شده: ${child.totalReserved-child.timeLeft} دقیقه", // Time passed.
                     style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ],

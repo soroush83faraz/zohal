@@ -6,8 +6,6 @@ class AddChildPage extends StatelessWidget {
   final TextEditingController ageController;
   final TextEditingController timeController;
   final TextEditingController timePassedController;
-  final String picture;
-  final VoidCallback onPickImage;
   final VoidCallback onSaveChild;
 
   const AddChildPage({
@@ -16,8 +14,6 @@ class AddChildPage extends StatelessWidget {
     required this.ageController,
     required this.timeController,
     required this.timePassedController,
-    required this.picture,
-    required this.onPickImage,
     required this.onSaveChild,
   });
 
@@ -25,9 +21,9 @@ class AddChildPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
+          children: [
             Text('اضافه کردن کودک'),
           ],
         ),
@@ -45,9 +41,9 @@ class AddChildPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
+                children: [
                   Text(
                     "اطلاعات کودک را وارد کنید",
                     style: TextStyle(
@@ -66,7 +62,6 @@ class AddChildPage extends StatelessWidget {
                   controller: nameController,
                   decoration: InputDecoration(
                     labelText: 'نام',
-                    
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(

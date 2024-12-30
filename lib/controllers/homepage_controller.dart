@@ -1,9 +1,10 @@
 import '../models/child.dart';
 
 class ChildController {
-  final List<Child> children = [];
-
+  List<Child> children = [];
+  final List<int> availableNumbers = [for (var i = 1; i <= 100; i++) i];
   void addChild(Child child) {
+    child.number = availableNumbers.removeAt(0);
     children.add(child);
   }
 
@@ -17,7 +18,16 @@ class ChildController {
     }
     children.sort((a, b) => a.timeLeft.compareTo(b.timeLeft));
   }
+
   void deleteChild(int index) {
+    int availableNumber = children[index].number;
+    availableNumbers.add(availableNumber);
+    availableNumbers.sort(null);
     children.removeAt(index);
   }
+
+  void setChildren(List<Child> childrenList) {
+    children = childrenList;
+  }
+  
 }

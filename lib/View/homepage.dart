@@ -4,31 +4,38 @@ import 'package:zohal/view/detail.dart';
 import 'package:zohal/controllers/homepage_controller.dart';
 import 'package:zohal/controllers/edit_controller.dart';
 import 'package:zohal/controllers/add_controller.dart';
-import 'dart:async'; 
+import 'package:zohal/controllers/save_controller.dart';
+import 'package:zohal/controllers/load_controller.dart';
+import 'dart:async';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final ChildController _controller = ChildController();
-  Color _titleColor =  Colors.white;
+  final SaveController _saveController = SaveController();
+  final LoadController _loadController = LoadController();
+  Color _titleColor = Colors.white;
 
   @override
   void initState() {
     super.initState();
+
+    _loadChildren();
     Timer.periodic(const Duration(minutes: 1), (_) {
       setState(() {
         _controller.updateTimes();
       });
+      _saveChildren(); // Save data every minute
     });
     Timer.periodic(const Duration(seconds: 2), (_) {
       setState(() {
-        _titleColor = (_titleColor == Colors.white) ? Colors.orangeAccent : Colors.white;
+        _titleColor =
+            (_titleColor == Colors.white) ? Colors.orangeAccent : Colors.white;
       });
     });
   }
@@ -43,20 +50,37 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _controller.addChild(newChild);
       });
+      _saveChildren(); // Save data after adding a child
     }
   }
 
   void _editChild(int index) async {
     final updatedChild = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => EditController(child: _controller.children[index])),
+      MaterialPageRoute(
+          builder: (_) => EditController(child: _controller.children[index])),
     );
 
     if (updatedChild != null && updatedChild is Child) {
       setState(() {
         _controller.editChild(index, updatedChild);
       });
+      _saveChildren(); // Save data after editing a child
     }
+  }
+
+  void _loadChildren() async {
+    List<Child> children = await _loadController.loadChildrenData();
+    for (var child in children) {
+      child.updateTimePassed(); // Update the time for each child
+    }
+    setState(() {
+      _controller.setChildren(children);
+    });
+  }
+
+  void _saveChildren() {
+    _saveController.saveChildrenData(_controller.children);
   }
 
   @override
@@ -124,41 +148,43 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () => _editChild(index),
                           ),
                           IconButton(
-  icon: const Icon(Icons.delete, color: Colors.white),
-  onPressed: () {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('حذف کودک'),
-          content: const Text('آیا مطمئن هستید؟'),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('خیر'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _controller.deleteChild(index);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: const Text('بله'),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  },
-),
+                            icon: const Icon(Icons.delete, color: Colors.white),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('حذف کودک'),
+                                    content: const Text('آیا مطمئن هستید؟'),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('خیر'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                _controller.deleteChild(index);
+                                              });
+                                              _saveChildren(); // Save data after deleting a child
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('بله'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -167,8 +193,11 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(
                           child.name,
-                          style: const TextStyle(fontSize: 20, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.white),
                         ),
+                        SizedBox(width: 3,),
+                        Text("-"+child.number.toString(),style: TextStyle(fontSize: 20),),
                       ],
                     ),
                     subtitle: Row(
@@ -177,14 +206,18 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                             child: LinearProgressIndicator(
-                              value: ((child.timePassed - child.totalReserved) / child.totalReserved).abs(),
+                              value: ((child.timeLeft) /
+                                      child.totalReserved)
+                                  .abs(),
                               backgroundColor: Colors.grey[300],
-                              color: child.timeLeft > 5 ? Colors.green : Colors.red,
+                              color: child.timeLeft > 5
+                                  ? Colors.green
+                                  : Colors.red,
                             ),
                           ),
                         ),
                         Text(
-                          "دقیقه ${(child.timePassed - child.totalReserved).abs()}",
+                          "دقیقه ${(child.timeLeft).abs()}",
                           style: const TextStyle(color: Colors.white70),
                         ),
                       ],

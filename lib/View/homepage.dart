@@ -137,57 +137,83 @@ class _HomePageState extends State<HomePage> {
                 itemCount: _controller.children.length,
                 itemBuilder: (context, index) {
                   final child = _controller.children[index];
-                  return ListTile(
-                    leading: SizedBox(
-                      width: 80, // Constrain the width of the leading widget
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.white),
-                            onPressed: () => _editChild(index),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.white),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('حذف کودک'),
-                                    content: const Text('آیا مطمئن هستید؟'),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('خیر'),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _controller.deleteChild(index);
-                                              });
-                                              _saveChildren(); // Save data after deleting a child
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('بله'),
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurpleAccent.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black54,
+                                  offset:  Offset(0, 4),
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                    child: Card (
+                      elevation: 20,
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20), 
+                      ),
+                    
+                      color: Colors.transparent,
+                      shadowColor: Colors.black54,
+                    
+                      child: ListTile(
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        leading: SizedBox(
+                          width: 80, 
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.white),
+                                onPressed: () => _editChild(index),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.white),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('حذف کودک'),
+                                        content: const Text('آیا مطمئن هستید؟'),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('خیر'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _controller.deleteChild(index);
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('بله'),
+                                              ),
+                                            ],
                                           ),
                                         ],
-                                      ),
-                                    ],
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -200,36 +226,33 @@ class _HomePageState extends State<HomePage> {
                         Text("-"+child.number.toString(),style: TextStyle(fontSize: 20),),
                       ],
                     ),
-                    subtitle: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                            child: LinearProgressIndicator(
-                              value: ((child.timeLeft) /
-                                      child.totalReserved)
-                                  .abs(),
-                              backgroundColor: Colors.grey[300],
-                              color: child.timeLeft > 5
-                                  ? Colors.green
-                                  : Colors.red,
+                        subtitle: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                                child: LinearProgressIndicator(
+                                  value: ((child.timeLeft) / child.totalReserved).abs(),
+                                  backgroundColor: Colors.grey[300],
+                                  color: child.timeLeft > 5 ? Colors.green : Colors.red,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Text(
+                            Text(
                           "دقیقه ${(child.timeLeft).abs()}",
                           style: const TextStyle(color: Colors.white70),
+                        ),                          ],
                         ),
-                      ],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChildDetailPage(child: child),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ChildDetailPage(child: child),
-                        ),
-                      );
-                    },
                   );
                 },
               ),

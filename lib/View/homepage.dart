@@ -198,6 +198,7 @@ class _HomePageState extends State<HomePage> {
                                                 onPressed: () {
                                                   setState(() {
                                                     _controller.deleteChild(index);
+                                                    _saveChildren();
                                                   });
                                                   Navigator.pop(context);
                                                 },

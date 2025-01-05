@@ -6,6 +6,7 @@ import 'package:zohal/controllers/edit_controller.dart';
 import 'package:zohal/controllers/add_controller.dart';
 import 'package:zohal/controllers/save_controller.dart';
 import 'package:zohal/controllers/load_controller.dart';
+import 'package:zohal/controllers/card_controller.dart';
 import 'dart:async';
 
 class HomePage extends StatefulWidget {
@@ -153,106 +154,108 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                    child: Card (
-                      elevation: 20,
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: GlowCard(
+                      child: Card (
+                        elevation: 20,
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20), 
+                        ),
                       
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20), 
-                      ),
-                    
-                      color: Colors.transparent,
-                      shadowColor: Colors.black54,
-                    
-                      child: ListTile(
-                        hoverColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        leading: SizedBox(
-                          width: 80, 
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.white),
-                                onPressed: () => _editChild(index),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.white),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('حذف کودک'),
-                                        content: const Text('آیا مطمئن هستید؟'),
-                                        actions: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text('خیر'),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _controller.deleteChild(index);
-                                                    _saveChildren();
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text('بله'),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
+                        color: Colors.transparent,
+                        shadowColor: Colors.black54,
+                      
+                        child: ListTile(
+                          hoverColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          leading: SizedBox(
+                            width: 80, 
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.white),
+                                  onPressed: () => _editChild(index),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.white),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('حذف کودک'),
+                                          content: const Text('آیا مطمئن هستید؟'),
+                                          actions: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text('خیر'),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      _controller.deleteChild(index);
+                                                      _saveChildren();
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text('بله'),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          child.name,
-                          style: const TextStyle(
-                              fontSize: 20, color: Colors.white),
-                        ),
-                        SizedBox(width: 3,),
-                        Text("-"+child.number.toString(),style: TextStyle(fontSize: 20),),
-                      ],
-                    ),
-                        subtitle: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                                child: LinearProgressIndicator(
-                                  value: ((child.timeLeft) / child.totalReserved).abs(),
-                                  backgroundColor: Colors.grey[300],
-                                  color: child.timeLeft > 5 ? Colors.green : Colors.red,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            child.name,
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          ),
+                          SizedBox(width: 3,),
+                          Text("-"+child.number.toString(),style: TextStyle(fontSize: 20),),
+                        ],
+                      ),
+                          subtitle: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                                  child: LinearProgressIndicator(
+                                    value: ((child.timeLeft) / child.totalReserved).abs(),
+                                    backgroundColor: Colors.grey[300],
+                                    color: child.timeLeft > 5 ? Colors.green : Colors.red,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(
-                          "دقیقه ${(child.timeLeft).abs()}",
-                          style: const TextStyle(color: Colors.white70),
-                        ),                          ],
+                              Text(
+                            "دقیقه ${(child.timeLeft).abs()}",
+                            style: const TextStyle(color: Colors.white70),
+                          ),                          ],
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChildDetailPage(child: child),
+                              ),
+                            );
+                          },
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ChildDetailPage(child: child),
-                            ),
-                          );
-                        },
                       ),
                     ),
                   );

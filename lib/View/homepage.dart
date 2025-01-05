@@ -119,6 +119,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: const BoxDecoration(
+          image: DecorationImage(image: AssetImage("images/winnie-the-pooh.png")),
           gradient: LinearGradient(
             colors: [Colors.purpleAccent, Colors.blueAccent],
             begin: Alignment.topLeft,

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 class AddChildPage extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController ageController;
   final TextEditingController timeController;
   final TextEditingController timePassedController;
   final VoidCallback onSaveChild;
-
+ 
   const AddChildPage({
     super.key,
     required this.nameController,
@@ -129,7 +128,7 @@ class AddChildPage extends StatelessWidget {
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: onSaveChild,
+                  onPressed: () => onSaveChild(),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                     shape: RoundedRectangleBorder(

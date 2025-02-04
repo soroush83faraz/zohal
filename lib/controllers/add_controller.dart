@@ -4,9 +4,8 @@ import 'package:zohal/models/child.dart';
 
 class AddController extends StatefulWidget {
   final Child? child;
-
-  const AddController({super.key, this.child});
-  
+  final List<Child> children;
+  const AddController({super.key, this.child, required this.children});
   @override
   _AddControllerState createState() => _AddControllerState();
 }
@@ -29,13 +28,13 @@ class _AddControllerState extends State<AddController> {
   }
 
   void _saveChild() {
+    int childNumber = widget.children.length;
     if (_nameController.text.isNotEmpty &&
         _ageController.text.isNotEmpty &&
         _timeController.text.isNotEmpty &&
         _timePassedController.text.isNotEmpty) {
       int totalReserved = int.parse(_timeController.text);
       int timePassed = int.parse(_timePassedController.text);
-
       if (totalReserved - timePassed <= 0) {
         const snackBar = SnackBar(
           content: Row(
@@ -57,7 +56,8 @@ class _AddControllerState extends State<AddController> {
           age: int.parse(_ageController.text),
           totalReserved: totalReserved,
           timeLeft: totalReserved - timePassed,
-          dateTimeReserved: DateTime.now().subtract(Duration(minutes: timePassed)), // Correctly set dateTimeReserved
+          dateTimeReserved: DateTime.now().subtract(Duration(minutes: timePassed)),
+          number: childNumber
         );
         Navigator.pop(context, child);
       }

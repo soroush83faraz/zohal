@@ -24,7 +24,6 @@ class LoadController {
       return [];
     }
   }
-
   Future<void> clearDatabase() async {
     final filePath = await _getFilePath();
     final file = File(filePath);

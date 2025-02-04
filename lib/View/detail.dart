@@ -17,7 +17,6 @@ class ChildDetailPage extends StatelessWidget {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          // Gradient background.
           gradient: LinearGradient(
             colors: [Colors.yellow, Colors.orange],
             begin: Alignment.topCenter,
@@ -34,12 +33,12 @@ class ChildDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "اسم: ${child.name}", // Display name.
+                    "اسم: ${child.name}",
                     style: const TextStyle(fontSize: 24, color: Colors.white),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "سن: ${child.age}", // Display age.
+                    "سن: ${child.age}",
                     style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                   const SizedBox(height: 10),

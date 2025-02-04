@@ -4,6 +4,8 @@ class ChildController {
   List<Child> children = [];
   final List<int> availableNumbers = [for (var i = 1; i <= 100; i++) i];
   void addChild(Child child) {
+    availableNumbers.removeWhere(
+        (number) => children.any((child) => child.number == number));
     child.number = availableNumbers.removeAt(0);
     children.add(child);
   }
@@ -29,5 +31,4 @@ class ChildController {
   void setChildren(List<Child> childrenList) {
     children = childrenList;
   }
-  
 }

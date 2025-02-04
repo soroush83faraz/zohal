@@ -4,8 +4,8 @@ import 'package:zohal/models/child.dart';
 
 class EditController extends StatefulWidget {
   final Child? child;
-
-  const EditController({super.key, this.child});
+  final List<Child> children;
+  const EditController({super.key, this.child, required this.children});
   @override
   _EditControllerState createState() => _EditControllerState();
 }
@@ -56,6 +56,7 @@ class _EditControllerState extends State<EditController> {
           age: int.parse(_ageController.text),
           totalReserved: totalReserved,
           timeLeft: totalReserved - timePassed,
+          number: widget.children.length+1
         );
         Navigator.pop(context, child);
       }

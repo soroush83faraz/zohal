@@ -2,18 +2,18 @@
 class Child {
   String name;
   int age;
-  int timeLeft; // in minutes
-  int totalReserved; // in minutes
+  int timeLeft; 
+  int totalReserved;
   DateTime dateTimeReserved;
-  late int number;
+  int number;
 
   Child({
     required this.name,
     required this.age,
     required this.totalReserved,
-    this.timeLeft = 0, // Default value
-    DateTime? dateTimeReserved, // Make this parameter optional
-    this.number = 0, // Default value for number
+    required this.number,
+    this.timeLeft = 0,
+    DateTime? dateTimeReserved,
   }) : dateTimeReserved = dateTimeReserved ?? DateTime.now();
 
   Map<String, dynamic> toJson() {

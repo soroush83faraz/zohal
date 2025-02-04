@@ -43,11 +43,6 @@ class _GlowCardState extends State<GlowCard> {
                     blurRadius: 1.0,
                     spreadRadius: 1.0,
                   ),
-                  // BoxShadow(
-                  //   color: Colors.blueAccent.withOpacity(0.3),
-                  //   blurRadius: 30.0,
-                  //   spreadRadius: 10.0,
-                  // ),
                 ]
               : [
                   BoxShadow(

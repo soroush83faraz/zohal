@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'view/homepage.dart';
+import 'package:provider/provider.dart';
+import 'theme/theme.dart'; // Import your theme file
+import 'view/homepage.dart'; // Import your homepage file
+import 'theme_provider.dart'; // Create this file (see below)
 
 void main() {
-  runApp(const KinderGartenApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const KinderGartenApp(),
+    ),
+  );
 }
 
 class KinderGartenApp extends StatelessWidget {
@@ -10,10 +18,13 @@ class KinderGartenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Kindergarten Time Manager', 
-      home: HomePage(), 
+      title: 'Kindergarten Time Manager',
+      theme: themeProvider.isDarkMode ? darkTheme : lightTheme,
+      home: const HomePage(),
     );
   }
 }

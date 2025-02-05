@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zohal/models/child.dart';
 import 'package:zohal/view/detail.dart';
 import 'package:zohal/controllers/homepage_controller.dart';
@@ -7,6 +8,8 @@ import 'package:zohal/controllers/add_controller.dart';
 import 'package:zohal/controllers/save_controller.dart';
 import 'package:zohal/controllers/load_controller.dart';
 import 'package:zohal/controllers/card_controller.dart';
+import 'package:zohal/theme/theme.dart';
+import 'package:zohal/theme_provider.dart';
 import 'dart:async';
 
 class HomePage extends StatefulWidget {
@@ -90,6 +93,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -112,26 +117,28 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.pinkAccent, Colors.orangeAccent],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
+        flexibleSpace: AnimatedContainer(
+          duration: const Duration(seconds: 1),
+          decoration: themeProvider.isDarkMode
+              ? appBarDarkDecoration
+              : appBarLightDecoration,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
             ),
+            onPressed: () {
+              themeProvider.toggleTheme();
+            },
           ),
-        ),
+        ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage("images/winnie-the-pooh.png")),
-          gradient: LinearGradient(
-            colors: [Colors.purpleAccent, Colors.blueAccent],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      body: AnimatedContainer(
+        duration: const Duration(seconds: 1),
+        decoration: themeProvider.isDarkMode
+            ? homePageDarkDecoration
+            : homePageLightDecoration,
         child: _controller.children.isEmpty
             ? const Center(
                 child: Text(
@@ -236,12 +243,12 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                     fontSize: 20, color: Colors.white),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 3,
                               ),
                               Text(
                                 "-" + (child.number).toString(),
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ],
                           ),

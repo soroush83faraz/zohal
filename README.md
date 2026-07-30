@@ -1,5 +1,7 @@
 # zohal (زحل)
 
+**Live demo:** https://soroush83faraz.github.io/zohal/ — in the web demo, data lives in memory for the session; the JSON-file persistence described below applies to native builds.
+
 A Flutter app for running the front desk of a kids' indoor playhouse — a "playhouse management system" (سیستم مدیریت خانه بازی) with a Persian, right-to-left UI.
 
 Staff check a child in with their name, age, contact number and the amount of play time reserved; the app then shows every child currently playing as an animated card with a live countdown. Each card has a progress bar that turns red when fewer than 5 minutes remain, so staff can see at a glance whose session is about to end.
